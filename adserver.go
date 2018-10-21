@@ -54,15 +54,17 @@ func readCSV(filename string) map[string]AdDetail {
 		if err == io.EOF {
 			break
 		} else if err != nil {
-			log.Fatal(err)
+			log.Println("Error parsing data", err)
 		}
 		price, err := strconv.ParseFloat(line[1], 32)
 		if err != nil {
-			log.Fatal(err)
+			log.Println("Error parsing data", err)
+			continue
 		}
 		expirationDate, err := time.Parse(time.RFC3339, line[2])
 		if err != nil {
-			log.Fatal(err)
+			log.Println("Error parsing data", err)
+			continue
 		}
 		data[line[0]] = AdDetail{
 			ID:             line[0],
