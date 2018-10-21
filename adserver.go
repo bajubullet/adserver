@@ -19,7 +19,11 @@ type AdDetail struct {
 }
 
 func main() {
-	data := readCSV()
+	if len(os.Args) < 2 {
+		log.Fatal("Please provide the CSV file.")
+	}
+	filename := os.Args[1]
+	data := readCSV(filename)
 	handler := func(w http.ResponseWriter, r *http.Request) {
 		adID := strings.TrimPrefix(r.URL.Path, "/promotions/")
 		if val, ok := data[adID]; ok {
@@ -38,9 +42,9 @@ func main() {
 	log.Fatal(http.ListenAndServe(":8080", nil))
 }
 
-func readCSV() map[string]AdDetail {
+func readCSV(filename string) map[string]AdDetail {
 	data := make(map[string]AdDetail)
-	csvFile, err := os.Open("data.csv")
+	csvFile, err := os.Open(filename)
 	if err != nil {
 		log.Fatal("Error opening file", err)
 	}
